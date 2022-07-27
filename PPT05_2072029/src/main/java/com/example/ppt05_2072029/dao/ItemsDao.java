@@ -18,14 +18,14 @@ public class ItemsDao implements DaoInterface<Items>{
         tList = FXCollections.observableArrayList();
 
         Connection conn = MySQLConnection.getConnection();
-        String query = "SELECT i.*, c.name AS Category_name FROM items i JOIN category c ON i.Category_id = c.id";
+        String query = "SELECT i.*, c.id AS Category_id, c.name AS Category_name FROM items i JOIN category c ON i.Category_id = c.id";
         PreparedStatement ps;
         try {
             ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Category c = new Category();
-                c.setId(rs.getInt("id"));
+                c.setId(rs.getInt("Category_id"));
                 c.setName(rs.getString("Category_name"));
 
                 Items i = new Items();
@@ -54,7 +54,6 @@ public class ItemsDao implements DaoInterface<Items>{
             ps.setDouble(3, data.getPrice());
             ps.setString(4, data.getDescription());
             ps.setInt(5, data.getCategory_id().getId());
-            System.out.println("add" + data.getCategory_id().getId());
             int hasil = ps.executeUpdate();
             if (hasil > 0) {
                 System.out.println("added");
@@ -92,7 +91,6 @@ public class ItemsDao implements DaoInterface<Items>{
             ps.setDouble(2, data.getPrice());
             ps.setString(3, data.getDescription());
             ps.setInt(4, data.getCategory_id().getId());
-            System.out.println(data.getCategory_id().getId());
             ps.setInt(5, data.getId());
             int hasil = ps.executeUpdate();
             if (hasil > 0) {
